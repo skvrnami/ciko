@@ -1,0 +1,4 @@
+pandas
+pocket-api
+feedparser
+trafilatura
