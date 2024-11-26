@@ -1,0 +1,81 @@
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+ul {
+    width: 60%;
+}
+
+.article {
+    width: 60%;
+}
+
+body {
+    display: flex;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.menu-bar {
+    position: fixed;
+    width: 200px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    height: 100vh;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+.menu-bar a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.menu-bar a:hover {
+    background-color: #ddd;
+}
+.content {
+    flex: 1;
+    padding: 20px;
+    margin-left: 240px;
+}
+.button {
+    display: inline-block;
+    padding: 10px 15px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+}
+.button:hover {
+    background-color: #0056b3;
+}
+
+.row {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Add space between items if needed */
+}
+
+span {
+    display: inline-flex; 
+    align-items: center;
+}
+
+span img {
+    vertical-align: middle; /* Aligns images inline with text */
+    display: inline-block; /* Ensures it's treated as an inline-level element */
+}
+
+.summary img {
+    max-width: 50px; 
+    max-height: 50px; 
+    width: auto; 
+    height: auto; 
+}

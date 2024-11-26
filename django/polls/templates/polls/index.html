@@ -1,0 +1,37 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+<div class="menu-bar">
+    <h3>Menu</h3>
+    <a href="{% url 'index' %}">To read</a>
+    <a href="{% url 'archive' %}">Archive</a>
+    <a href="{% url 'stats' %}">Stats</a>
+    <a href="{% url 'trash' %}">Trash</a>
+</div>
+
+<div class="content">
+
+<h1>Items</h1>
+
+{% if latest_texts %}
+    <ul>
+    {% for text in latest_texts %}
+        <li>
+            <div><a href="/polls/{{ text.id }}/">{{ text.title }}</a></div>
+            <div class="row">
+                <div class="summary">{{text.summary | safe}}</div>
+                <div><a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /></a></div>
+            </div>
+        </tr> 
+        </span>
+        <br/>
+        </li>
+        <br/>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No texts are available.</p>
+{% endif %}
+
+</div>

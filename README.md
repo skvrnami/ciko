@@ -8,16 +8,18 @@ zdroje
 - [x] RSS feedy
 - [ ] newslettery
 - [x] pocket (https://pypi.org/project/pocket-api/)
+- [ ] bluesky
 - [-] browser addon/shortcut in raycast
 
 zobrazení
-- [ ] text z trafilatury
+- [x] text z trafilatury
 - [ ] načíst web v side panelu
 
 features
-- [ ] to read
-- [ ] archiv
-- [ ] statistiky přečtení
+- [x] to read
+    - [ ] pagination
+- [x] archiv
+- [x] statistiky přečtení
 
 vychytávky
 - [ ] LLM summary

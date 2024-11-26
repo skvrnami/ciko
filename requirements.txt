@@ -2,3 +2,4 @@ pandas
 pocket-api
 feedparser
 trafilatura
+django
