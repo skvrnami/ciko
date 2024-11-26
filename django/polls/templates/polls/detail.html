@@ -20,6 +20,8 @@
     {% else %}
     <span><a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /><span>Remove from trash</span></a></span>
     {% endif %}
+
+    <button id="save-highlight-btn" type="button">Save Highlight</button>
     
 </div>
 
@@ -37,3 +39,39 @@
 
 
 </div>
+
+<script>
+document.addEventListener('mouseup', function() {
+    event.preventDefault();  
+    selectedText = window.getSelection().toString();  // Get the selected text
+    console.log(selectedText)
+});
+
+document.getElementById('save-highlight-btn').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent the default action (e.g., form submission)
+    
+    if (selectedText.length > 0) {  // Only proceed if some text is selected
+        var textId = '{{ text.id }}';  // Get the current article ID
+        console.log(JSON.stringify({ 'content': selectedText }));
+        // Send the selected text to the Django view via AJAX
+        fetch("{% url 'add_highlight' text.id %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'content': selectedText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Highlight saved: ' + data.content);
+            } else {
+                alert('Error: ' + data.message);
+            }
+        });
+    } else {
+        alert('Please select some text to highlight.');
+    }
+});
+
+</script>

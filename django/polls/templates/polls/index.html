@@ -6,6 +6,7 @@
     <h3>Menu</h3>
     <a href="{% url 'index' %}">To read</a>
     <a href="{% url 'archive' %}">Archive</a>
+    <a href="{% url 'highlights' %}">Highlights</a>
     <a href="{% url 'stats' %}">Stats</a>
     <a href="{% url 'trash' %}">Trash</a>
 </div>
@@ -18,7 +19,7 @@
     <ul>
     {% for text in latest_texts %}
         <li>
-            <div><a href="/polls/{{ text.id }}/">{{ text.title }}</a></div>
+            <div><a href="/polls/article/{{ text.id }}/">{{ text.title }}</a></div>
             <div class="row">
                 <div class="summary">{{text.summary | safe}}</div>
                 <div><a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /></a></div>

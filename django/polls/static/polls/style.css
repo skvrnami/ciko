@@ -41,6 +41,7 @@ body {
     flex: 1;
     padding: 20px;
     margin-left: 240px;
+    width: 60%;
 }
 .button {
     display: inline-block;

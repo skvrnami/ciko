@@ -8,7 +8,7 @@ zdroje
 - [x] RSS feedy
 - [ ] newslettery
 - [x] pocket (https://pypi.org/project/pocket-api/)
-- [ ] bluesky
+- [ ] bluesky (https://pypi.org/project/atproto/)
 - [-] browser addon/shortcut in raycast
 
 zobrazení
@@ -18,16 +18,21 @@ zobrazení
 features
 - [x] to read
     - [ ] pagination
+    - [ ] filtr podle zdroje / domén
+    - [ ] reading time
 - [x] archiv
 - [x] statistiky přečtení
+    - [ ] graf
+    - [ ] přečtení vs. smazání
+- [x] highlights
+    - [ ] zobrazení highlights v detailu článku
+    - [ ] odstranění highlights
+- [ ] přidání tagů
 
 vychytávky
-- [ ] LLM summary
+- [x] LLM summary
 - [ ] skórování toho, co mě zajímá
-- [ ] stats o přečtení (přečtení vs. smazání)
-
 - [ ] export zvýraznění do obsidianu
-
 - [ ] fulltext search
 
 output / POSSE ?

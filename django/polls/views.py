@@ -1,11 +1,13 @@
+import json
 from django.shortcuts import render
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.template import loader
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import Text
+from .models import Text, Highlight
 from .stats import summarise_read_articles
 
 def index(request):
@@ -60,3 +62,26 @@ def stats(request):
     df_html = df.to_html(classes='table table-striped table-bordered')
 
     return render(request, "polls/stats.html", {'df_html': df_html})
+
+def highlights(request):
+    hs = Highlight.objects.select_related('text').all().order_by("-created_at")
+
+    return render(request, "polls/highlights.html", {"highlights": hs})
+
+@csrf_exempt
+def add_highlight(request, text_id):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        content = data.get("content")
+        print(content)
+        # content = request.POST.get('content')  # Get the selected text from the POST data
+        text = get_object_or_404(Text, id=text_id)
+
+        # Save the highlight in the database
+        if content:
+            highlight = Highlight.objects.create(text=text, content=content)
+            return JsonResponse({'status': 'success', 'highlight_id': highlight.id, 'content': content})
+
+        return JsonResponse({'status': 'error', 'message': 'No content provided.'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
