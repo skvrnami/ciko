@@ -5,11 +5,13 @@
 ## features
 
 zdroje
-- [x] RSS feedy
-- [ ] newslettery
-- [x] pocket (https://pypi.org/project/pocket-api/)
-- [ ] bluesky (https://pypi.org/project/atproto/)
-- [-] browser addon/shortcut in raycast
+- [ ] správa zdrojů
+- [/] načítání obsahu z:
+    - [x] RSS feedy
+    - [ ] newslettery
+    - [x] pocket (https://pypi.org/project/pocket-api/)
+    - [ ] bluesky (https://pypi.org/project/atproto/)
+    - [ ] https://github.com/Monkfishare/Calibre/tree/main
 
 zobrazení
 - [x] text z trafilatury
@@ -20,6 +22,7 @@ features
     - [ ] pagination
     - [ ] filtr podle zdroje / domén
     - [ ] reading time
+    - [ ] shorten the summary displayed on index / show only llm summary.
 - [x] archiv
 - [x] statistiky přečtení
     - [ ] graf
@@ -28,6 +31,7 @@ features
     - [ ] zobrazení highlights v detailu článku
     - [ ] odstranění highlights
 - [ ] přidání tagů
+
 
 vychytávky
 - [x] LLM summary
