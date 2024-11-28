@@ -43,6 +43,8 @@ body {
     margin-left: 240px;
     width: 60%;
 }
+
+
 .button {
     display: inline-block;
     padding: 10px 15px;
@@ -80,6 +82,14 @@ span img {
     width: auto; 
     height: auto; 
 }
+
+.content img {
+    max-width: 600px; 
+    max-height: 400px; 
+    width: auto;
+    height: auto;
+}
+
 
 .pagination {
     margin: 0 auto; 

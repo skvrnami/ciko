@@ -88,7 +88,7 @@ def feeds(request):
 
 def update_feed(request, feed_id):
     feed = RssFeed.objects.filter(Q(id=feed_id))[0]
-    updated = parse_feed(feed.url)
+    updated = parse_feed(feed)
     RssFeed.objects.filter(Q(id=feed_id)).update(last_updated=updated)
 
     return redirect("index")

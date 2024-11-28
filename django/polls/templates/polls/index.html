@@ -26,6 +26,7 @@
             <div>
                 <a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /></a>
                 <a href="{% url 'read' text.id %}">Mark as read</a>
+                | {{text.publication_date}}
             </div>
             <div class="row">
                 <div class="summary">{{text.summary | safe}}</div>

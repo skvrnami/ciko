@@ -22,7 +22,7 @@ features
     - [x] pagination
     - [ ] filtr podle zdroje / domén
     - [ ] reading time
-    - [ ] shorten the summary displayed on index / show only llm summary.
+    - [x] shorten the summary displayed on index / show only llm summary.
 - [x] archiv
 - [x] statistiky přečtení
     - [ ] graf

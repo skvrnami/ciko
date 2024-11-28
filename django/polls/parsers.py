@@ -23,7 +23,7 @@ def convert_date_parsed(x):
     return datetime.fromtimestamp(time.mktime(x))
 
 def parse_feed(feed):
-    feed_entries = fp.parse(feed)
+    feed_entries = fp.parse(feed.url)
     entries = feed_entries.entries
     df_entries = pd.DataFrame.from_dict(entries)
 
@@ -52,10 +52,10 @@ def parse_feed(feed):
                 txt = row["summary"]
 
         if len(row["summary"]) > 500:
-            row["summary"] = row["summary"][0:500] + "... trimmed ..."
+            row["summary"] = row["summary"][0:500] + "[...]"
         
         t = Text(link = row["link"], publication_date = row["published"], author = row["author"], 
-                 title = row["title"], summary = row["summary"], content = txt)
+                 title = row["title"], summary = row["summary"], content = txt, source = feed.name)
         try:
             print(t)
             t.save()
