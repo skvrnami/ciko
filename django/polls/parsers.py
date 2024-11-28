@@ -1,4 +1,5 @@
 import time
+import bleach
 import pandas as pd
 import numpy as np
 import feedparser as fp
@@ -6,8 +7,9 @@ import trafilatura as tf
 
 from datetime import datetime
 from django.db.utils import IntegrityError
-from .models import Text
 from ollama_summarise import summarise_text
+from .models import Text
+from .utils import bleach_text
 
 def convert_date(x):
     try:
@@ -42,7 +44,13 @@ def parse_feed(feed):
     df_entries_trim = df_entries[required_columns]
 
     for _, row in df_entries_trim.iterrows():
-        if len(row["content"][0]["value"]):
+        if row["content"] == "":
+            try:
+                html = tf.fetch_url(row["link"])
+                txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True)
+            except:
+                txt = row["summary"]
+        elif len(row["content"][0]["value"]):
             txt = row["content"][0]["value"]
         else:
             try:
@@ -55,7 +63,7 @@ def parse_feed(feed):
             row["summary"] = row["summary"][0:500] + "[...]"
         
         t = Text(link = row["link"], publication_date = row["published"], author = row["author"], 
-                 title = row["title"], summary = row["summary"], content = txt, source = feed.name)
+                 title = row["title"], summary = bleach_text(row["summary"]), content = txt, source = feed.name)
         try:
             print(t)
             t.save()
@@ -64,3 +72,5 @@ def parse_feed(feed):
         
     
     return datetime.now()
+
+# def parse_pocket(last_updated)
