@@ -2,37 +2,49 @@ import json
 from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from django.template import loader
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Text, Highlight
+from .models import Text, Highlight, RssFeed
 from .stats import summarise_read_articles
+from .parsers import parse_feed
 
 def index(request):
-    latest_texts = Text.objects.filter(~Q(read=True) & ~Q(deleted=True)).order_by("-publication_date")[:10]
-    template = loader.get_template("polls/index.html")
-    context = {
-        "latest_texts": latest_texts,
-    }
-    return render(request, "polls/index.html", context)
+    latest_texts = Text.objects.filter(~Q(read=True) & ~Q(deleted=True)).order_by("-publication_date")
+
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(latest_texts, 10)
+    try:
+        texts = paginator.get_page(page_number)
+    except Http404:
+        texts = None
+
+    return render(request, "polls/index.html", {"latest_texts": texts})
 
 def archive(request):
     archived_texts = Text.objects.filter(Q(read=True)).order_by("-id")
-    template = loader.get_template("polls/index.html")
-    context = {
-        "latest_texts": archived_texts,
-    }
-    return render(request, "polls/index.html", context)
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(archived_texts, 10)
+    try:
+        texts = paginator.get_page(page_number)
+    except Http404:
+        texts = None
+    
+    return render(request, "polls/index.html", {"latest_texts": texts})
 
 def trash(request):
     trashed_texts = Text.objects.filter(Q(deleted=True)).order_by("-id")
-    template = loader.get_template("polls/index.html")
-    context = {
-        "latest_texts": trashed_texts,
-    }
-    return render(request, "polls/index.html", context)
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(trashed_texts, 10)
+    try:
+        texts = paginator.get_page(page_number)
+    except Http404:
+        texts = None
+
+    return render(request, "polls/index.html", {"latest_texts": texts})
 
 def detail(request, text_id):
     try:
@@ -54,7 +66,8 @@ def deleted(request, text_id):
     t.deleted = not t.deleted
     t.save()
 
-    return redirect("index")
+    # return redirect("index")
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def stats(request):
     read_texts = Text.objects.filter(Q(read=True))
@@ -68,13 +81,26 @@ def highlights(request):
 
     return render(request, "polls/highlights.html", {"highlights": hs})
 
+def feeds(request):
+    feeds = RssFeed.objects.all()
+
+    return render(request, "polls/feeds.html", {"feeds": feeds})
+
+def update_feed(request, feed_id):
+    feed = RssFeed.objects.filter(Q(id=feed_id))[0]
+    updated = parse_feed(feed.url)
+    RssFeed.objects.filter(Q(id=feed_id)).update(last_updated=updated)
+
+    return redirect("index")
+
+
 @csrf_exempt
 def add_highlight(request, text_id):
     if request.method == "POST":
         data = json.loads(request.body)
         content = data.get("content")
         print(content)
-        # content = request.POST.get('content')  # Get the selected text from the POST data
+        # content = request.POST.get('content')
         text = get_object_or_404(Text, id=text_id)
 
         # Save the highlight in the database

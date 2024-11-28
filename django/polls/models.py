@@ -23,3 +23,12 @@ class Highlight(models.Model):
 
     def __str__(self):
         return f"Highlight from {self.text.title}"
+    
+class RssFeed(models.Model):
+    id = models.IntegerField("id", primary_key=True)
+    name = models.CharField(max_length=200)
+    url = models.CharField(max_length=200)
+    last_updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

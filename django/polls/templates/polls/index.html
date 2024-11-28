@@ -7,6 +7,7 @@
     <a href="{% url 'index' %}">To read</a>
     <a href="{% url 'archive' %}">Archive</a>
     <a href="{% url 'highlights' %}">Highlights</a>
+    <a href="{% url 'feeds' %}">Feeds</a>
     <a href="{% url 'stats' %}">Stats</a>
     <a href="{% url 'trash' %}">Trash</a>
 </div>
@@ -19,10 +20,15 @@
     <ul>
     {% for text in latest_texts %}
         <li>
-            <div><a href="/polls/article/{{ text.id }}/">{{ text.title }}</a></div>
+            <div>
+                <a href="/polls/article/{{ text.id }}/">{{ text.title }}</a>
+            </div>
+            <div>
+                <a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /></a>
+                <a href="{% url 'read' text.id %}">Mark as read</a>
+            </div>
             <div class="row">
                 <div class="summary">{{text.summary | safe}}</div>
-                <div><a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /></a></div>
             </div>
         </tr> 
         </span>
@@ -35,4 +41,26 @@
     <p>No texts are available.</p>
 {% endif %}
 
+<div class="pagination">
+    <!-- Previous Page -->
+    {% if latest_texts.has_previous %}
+        <a href="?page={{ latest_texts.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    <!-- Page Numbers -->
+    {% for num in latest_texts.paginator.page_range %}
+        {% if latest_texts.number == num %}
+            <strong>{{ num }}</strong>
+        {% else %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Next Page -->
+    {% if latest_texts.has_next %}
+        <a href="?page={{ latest_texts.next_page_number }}">Next</a>
+    {% endif %}
 </div>
+
+</div>
+

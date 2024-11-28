@@ -5,7 +5,7 @@
 ## features
 
 zdroje
-- [ ] správa zdrojů
+- [x] správa zdrojů
 - [/] načítání obsahu z:
     - [x] RSS feedy
     - [ ] newslettery
@@ -19,7 +19,7 @@ zobrazení
 
 features
 - [x] to read
-    - [ ] pagination
+    - [x] pagination
     - [ ] filtr podle zdroje / domén
     - [ ] reading time
     - [ ] shorten the summary displayed on index / show only llm summary.

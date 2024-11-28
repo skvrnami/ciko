@@ -13,10 +13,14 @@ django.setup()
 
 from polls.models import Text
 
+
 rss_feeds = ["https://www.theverge.com/rss/index.xml", 
              "https://simonwillison.net/atom/everything/", 
              "https://www.hearingthings.co/archive/rss/", 
              "https://www.citationneeded.news/rss/"]
+
+rss_feeds = ["https://statmodeling.stat.columbia.edu/feed/"]
+
 
 def convert_date(x):
     try:

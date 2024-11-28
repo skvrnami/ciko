@@ -80,3 +80,9 @@ span img {
     width: auto; 
     height: auto; 
 }
+
+.pagination {
+    margin: 0 auto; 
+    text-align: center; 
+    /* align-items: center; */
+}

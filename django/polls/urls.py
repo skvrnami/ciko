@@ -11,5 +11,7 @@ urlpatterns = [
     path("read/<int:text_id>/", views.read, name="read"),
     path("deleted/<int:text_id>/", views.deleted, name="deleted"),
     path("stats/", views.stats, name='stats'),
+    path("feeds/", views.feeds, name='feeds'),
     path("highlights/", views.highlights, name='highlights'),
+    path("update_feed/<int:feed_id>", views.update_feed, name="update_feed"),
 ]

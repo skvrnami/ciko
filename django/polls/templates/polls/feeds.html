@@ -1,0 +1,35 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+<div class="menu-bar">
+    <h3>Menu</h3>
+    <a href="{% url 'index' %}">To read</a>
+    <a href="{% url 'archive' %}">Archive</a>
+    <a href="{% url 'highlights' %}">Highlights</a>
+    <a href="{% url 'feeds' %}">Feeds</a>
+    <a href="{% url 'stats' %}">Stats</a>
+    <a href="{% url 'trash' %}">Trash</a>
+</div>
+
+
+<div class="content">
+
+<h1>Feeds</h1>
+
+{% if feeds %}
+    <table>
+    {% for feed in feeds %}
+        <tr>
+            <td>{{feed.name}}</td>
+            <!--<td>{{feed.url}}</td>-->
+            <td>{{feed.last_updated}}</td>
+            <td><a href="/polls/update_feed/{{feed.id}}">Update</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No feeds are available.</p>
+{% endif %}
+
+</div>
