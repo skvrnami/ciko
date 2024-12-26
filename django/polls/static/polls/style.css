@@ -96,3 +96,36 @@ span img {
     text-align: center; 
     /* align-items: center; */
 }
+
+#notification-area {
+    position: absolute; 
+    bottom: 50px; /* Distance from the bottom of the menu bar */
+    left: 20px; 
+    right: 20px; 
+    background-color: #f8d7da;
+    color: #721c24; 
+    border: 1px solid #f5c6cb; 
+    padding: 10px 15px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    font-size: 14px; 
+    z-index: 1000; 
+    display: none; 
+}
+
+.source-filters {
+    margin-bottom: 20px;
+}
+
+.source-filters a {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.source-filters a.active {
+    background-color: #007bff;
+    color: white;
+    border-radius: 3px;
+}

@@ -2,6 +2,7 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
+
 <div class="menu-bar">
     <a href="{% url 'index' %}">Back home</a>
     <br/>
@@ -16,13 +17,15 @@
     {% endif %}
 
     {% if not text.deleted %}
-    <span><a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /><span>Move to trash</span></a></span>
+    <span><a href="{% url 'deleted' text.id %}"><button>Move to trash</button></a></span>
     {% else %}
-    <span><a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /><span>Remove from trash</span></a></span>
+    <span><a href="{% url 'deleted' text.id %}"><button>Remove from trash</button></a></span>
     {% endif %}
 
-    <button id="save-highlight-btn" type="button">Save Highlight</button>
+    <a><button id="save-highlight-btn" type="button">Save Highlight</button></a>
     
+    <div id="notification-area"></div>
+
 </div>
 
 
@@ -37,8 +40,8 @@
 {{ text.content | safe}}
 </div>
 
-
 </div>
+
 
 <script>
 document.addEventListener('mouseup', function() {
@@ -63,15 +66,41 @@ document.getElementById('save-highlight-btn').addEventListener('click', function
         })
         .then(response => response.json())
         .then(data => {
-            if (data.status === 'success') {
-                alert('Highlight saved: ' + data.content);
+            if (data.status === 'error') {
+                displayMessage(data.message.content, true); 
             } else {
-                alert('Error: ' + data.message);
+                displayMessage(data.message.content, false);
             }
         });
     } else {
         alert('Please select some text to highlight.');
     }
 });
+
+function displayMessage(message, isError) {
+    const notificationArea = document.getElementById('notification-area');
+    
+    // Set styles dynamically based on success or error
+    if (isError) {
+        notificationArea.style.backgroundColor = '#f8d7da'; // Error background
+        notificationArea.style.color = '#721c24'; // Error text color
+        notificationArea.style.borderColor = '#f5c6cb'; // Error border
+        notificationArea.textContent = "error!";
+    } else {
+        notificationArea.style.backgroundColor = '#d4edda'; // Success background
+        notificationArea.style.color = '#155724'; // Success text color
+        notificationArea.style.borderColor = '#c3e6cb'; // Success border
+        notificationArea.textContent = "highlight saved!";
+    }
+
+    // Set the message and make the notification visible
+    
+    notificationArea.style.display = 'block';
+
+    // Automatically hide after 5 seconds
+    setTimeout(() => {
+        notificationArea.style.display = 'none';
+    }, 5000);
+}
 
 </script>

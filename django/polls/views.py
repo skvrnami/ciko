@@ -4,16 +4,39 @@ from django.http import Http404, JsonResponse
 from django.template import loader
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Text, Highlight, RssFeed
 from .stats import summarise_read_articles
 from .parsers import parse_feed
+from .utils import estimate_reading_time, bleach_text
 
 def index(request):
-    latest_texts = Text.objects.filter(~Q(read=True) & ~Q(deleted=True)).order_by("-publication_date")
+    # Get the selected source from query parameters (for filtering)
+    selected_source = request.GET.get('source')
+    
+    # Base queryset
+    base_query = Text.objects.filter(~Q(read=True) & ~Q(deleted=True))
+    
+    # Calculate counts per source
+    source_counts = base_query.values('source').annotate(
+        count=Count('id')
+    ).order_by('source')
+    
+    # Apply source filter if selected
+    if selected_source:
+        latest_texts = base_query.filter(source=selected_source)
+    else:
+        latest_texts = base_query
+    
+    # Order by publication date
+    latest_texts = latest_texts.order_by("-publication_date")
+
+    # Calculate reading time
+    for text in latest_texts:
+        text.reading_time = estimate_reading_time(bleach_text(text.content))
 
     page_number = request.GET.get('page', 1)
     paginator = Paginator(latest_texts, 10)
@@ -22,10 +45,16 @@ def index(request):
     except Http404:
         texts = None
 
-    return render(request, "polls/index.html", {"latest_texts": texts})
+    context = {
+        "latest_texts": texts,
+        "source_counts": source_counts,
+        "selected_source": selected_source,
+    }
+
+    return render(request, "polls/index.html", context)
 
 def archive(request):
-    archived_texts = Text.objects.filter(Q(read=True)).order_by("-id")
+    archived_texts = Text.objects.filter(Q(read=True)).order_by("-read_date")
     page_number = request.GET.get('page', 1)
     paginator = Paginator(archived_texts, 10)
     try:
@@ -59,14 +88,17 @@ def read(request, text_id):
     t.read_date = t.read_date = now() if t.read else None
     t.save()
 
-    return redirect("index")
+    if 'article' in request.META.get('HTTP_REFERER'):
+        return redirect('index')
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def deleted(request, text_id):
     t = get_object_or_404(Text, pk=text_id)
     t.deleted = not t.deleted
     t.save()
 
-    # return redirect("index")
+    if 'article' in request.META.get('HTTP_REFERER'):
+        return redirect('index')
     return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def stats(request):
@@ -82,7 +114,7 @@ def highlights(request):
     return render(request, "polls/highlights.html", {"highlights": hs})
 
 def feeds(request):
-    feeds = RssFeed.objects.all()
+    feeds = RssFeed.objects.all().order_by("-last_updated")
 
     return render(request, "polls/feeds.html", {"feeds": feeds})
 
@@ -93,6 +125,15 @@ def update_feed(request, feed_id):
 
     return redirect("index")
 
+def update_feeds(request):
+    feeds = RssFeed.objects.all()
+    for feed in feeds:
+        updated = parse_feed(feed)
+        RssFeed.objects.filter(Q(id=feed.id)).update(last_updated=updated)
+
+    return redirect("index")
+    
+
 
 @csrf_exempt
 def add_highlight(request, text_id):
@@ -100,13 +141,11 @@ def add_highlight(request, text_id):
         data = json.loads(request.body)
         content = data.get("content")
         print(content)
-        # content = request.POST.get('content')
         text = get_object_or_404(Text, id=text_id)
 
-        # Save the highlight in the database
         if content:
             highlight = Highlight.objects.create(text=text, content=content)
-            return JsonResponse({'status': 'success', 'highlight_id': highlight.id, 'content': content})
+            return JsonResponse({'status': 'success', 'highlight_id': highlight.id, 'message': 'Highlight saved.'})
 
         return JsonResponse({'status': 'error', 'message': 'No content provided.'})
 

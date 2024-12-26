@@ -33,8 +33,10 @@ def parse_feed(feed):
 
     if "published_parsed" in df_entries.columns:
         df_entries["published"] = df_entries["published_parsed"].apply(convert_date_parsed)
+    elif "updated_parsed" in df_entries.columns:
+        df_entries["published"] = df_entries["updated_parsed"].apply(convert_date_parsed)
     else:
-        df_entries_trim["published"] = df_entries_trim["published"].apply(convert_date)
+        df_entries["published"] = df_entries["published"].apply(convert_date)
 
     missing_columns = set(required_columns) - set(df_entries.columns)
 
@@ -47,9 +49,27 @@ def parse_feed(feed):
         if row["content"] == "":
             try:
                 html = tf.fetch_url(row["link"])
-                txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True)
+                txt = tf.extract(html, output_format = "html", include_links=True, 
+                                 include_images=True, include_formatting=True, 
+                                 include_comments=False)
             except:
                 txt = row["summary"]
+        # když je text krátký, zkus to scrapovat
+        elif len(bleach_text(row["content"][0]["value"])) < 2000:
+            try:
+                html = tf.fetch_url(row["link"])
+                txt = tf.extract(html, output_format = "html", include_links=True, 
+                                 include_images=True, include_formatting=True, 
+                                 include_comments=False)
+            except:
+                txt = row["summary"]
+            
+            if txt is None:
+                txt = ""
+
+            if len(row["content"][0]["value"]) > len(txt):
+                txt = row["content"][0]["value"]
+        
         elif len(row["content"][0]["value"]):
             txt = row["content"][0]["value"]
         else:
@@ -60,10 +80,11 @@ def parse_feed(feed):
                 txt = row["summary"]
 
         if len(row["summary"]) > 500:
-            row["summary"] = row["summary"][0:500] + "[...]"
+            bleached_summary = bleach.clean(row["summary"], tags={'b', 'i'}, strip=True)
+            row["summary"] = bleached_summary[0:500] + "[...]"
         
         t = Text(link = row["link"], publication_date = row["published"], author = row["author"], 
-                 title = row["title"], summary = bleach_text(row["summary"]), content = txt, source = feed.name)
+                 title = row["title"], summary = row["summary"], content = txt, source = feed.name)
         try:
             print(t)
             t.save()

@@ -16,6 +16,19 @@
 
 <h1>Items</h1>
 
+<div class="source-filters">
+    <h3>Sources</h3>
+    <a href="{% url 'index' %}" class="{% if not selected_source %}active{% endif %}">
+        All Sources
+    </a>
+    {% for source in source_counts %}
+    <a href="{% url 'index' %}?source={{ source.source }}" 
+       class="{% if selected_source == source.source %}active{% endif %}">
+        {{ source.source }} ({{ source.count }})
+    </a>
+    {% endfor %}
+</div>
+
 {% if latest_texts %}
     <ul>
     {% for text in latest_texts %}
@@ -24,12 +37,12 @@
                 <a href="/polls/article/{{ text.id }}/">{{ text.title }}</a>
             </div>
             <div>
-                <a href="{% url 'deleted' text.id %}"><img src="{% static 'polls/bin.png' %}" /></a>
+                {{text.publication_date}} | {{ text.source }} | {{text.reading_time}} min | 
+                <a href="{% url 'deleted' text.id %}">Delete</a> / 
                 <a href="{% url 'read' text.id %}">Mark as read</a>
-                | {{text.publication_date}} | {{ text.source }}
             </div>
             <div class="row">
-                <div class="summary">{{text.summary | safe}}</div>
+                <div class="perex">{{text.summary | safe}}</div>
             </div>
         </tr> 
         </span>

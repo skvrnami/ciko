@@ -8,10 +8,9 @@ zdroje
 - [x] správa zdrojů
 - [/] načítání obsahu z:
     - [x] RSS feedy
-    - [ ] newslettery
+    - [x] newslettery
     - [x] pocket (https://pypi.org/project/pocket-api/)
     - [ ] bluesky (https://pypi.org/project/atproto/)
-    - [ ] https://github.com/Monkfishare/Calibre/tree/main
 
 zobrazení
 - [x] text z trafilatury
@@ -21,7 +20,7 @@ features
 - [x] to read
     - [x] pagination
     - [ ] filtr podle zdroje / domén
-    - [ ] reading time
+    - [x] reading time
     - [x] shorten the summary displayed on index / show only llm summary.
 - [x] archiv
 - [x] statistiky přečtení
