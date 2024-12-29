@@ -51,7 +51,7 @@ def index(request):
         "selected_source": selected_source,
     }
 
-    return render(request, "polls/index.html", context)
+    return render(request, "read/index.html", context)
 
 def archive(request):
     archived_texts = Text.objects.filter(Q(read=True)).order_by("-read_date")
@@ -62,7 +62,7 @@ def archive(request):
     except Http404:
         texts = None
     
-    return render(request, "polls/index.html", {"latest_texts": texts})
+    return render(request, "read/index.html", {"latest_texts": texts})
 
 def trash(request):
     trashed_texts = Text.objects.filter(Q(deleted=True)).order_by("-id")
@@ -73,14 +73,14 @@ def trash(request):
     except Http404:
         texts = None
 
-    return render(request, "polls/index.html", {"latest_texts": texts})
+    return render(request, "read/index.html", {"latest_texts": texts})
 
 def detail(request, text_id):
     try:
         text = Text.objects.get(pk=text_id)
     except Text.DoesNotExist:
         raise Http404("Text does not exist")
-    return render(request, "polls/detail.html", {"text": text})
+    return render(request, "read/detail.html", {"text": text})
 
 def read(request, text_id):
     t = get_object_or_404(Text, pk=text_id)
@@ -106,17 +106,17 @@ def stats(request):
     df = summarise_read_articles(read_texts)
     df_html = df.to_html(classes='table table-striped table-bordered')
 
-    return render(request, "polls/stats.html", {'df_html': df_html})
+    return render(request, "read/stats.html", {'df_html': df_html})
 
 def highlights(request):
     hs = Highlight.objects.select_related('text').all().order_by("-created_at")
 
-    return render(request, "polls/highlights.html", {"highlights": hs})
+    return render(request, "read/highlights.html", {"highlights": hs})
 
 def feeds(request):
     feeds = RssFeed.objects.all().order_by("-last_updated")
 
-    return render(request, "polls/feeds.html", {"feeds": feeds})
+    return render(request, "read/feeds.html", {"feeds": feeds})
 
 def update_feed(request, feed_id):
     feed = RssFeed.objects.filter(Q(id=feed_id))[0]

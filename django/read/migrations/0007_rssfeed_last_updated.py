@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('polls', '0006_rssfeed'),
+        ('read', '0006_rssfeed'),
     ]
 
     operations = [

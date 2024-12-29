@@ -18,9 +18,9 @@ from ollama_summarise import summarise_text
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 django.setup()
 
-from polls.models import Text
-from polls.utils import bleach_text
-from polls.parsers import convert_date
+from read.models import Text
+from read.utils import bleach_text
+from read.parsers import convert_date
 
 # Define the scope
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']

@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 django.setup()
 
 from django.db.models import Q
-from polls.models import Text
+from read.models import Text
 
 read_texts = Text.objects.filter(Q(read=True))
 read_texts.values("read_date", "content")

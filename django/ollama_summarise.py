@@ -5,7 +5,7 @@ from ollama import chat
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 django.setup()
 
-from polls.models import Text
+from read.models import Text
 
 texts = Text.objects.order_by("-id")
 

@@ -1,6 +1,6 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+<link rel="stylesheet" href="{% static 'read/style.css' %}">
 
 <div class="menu-bar">
     <h3>Menu</h3>
@@ -18,14 +18,14 @@
 <h1>Feeds</h1>
 
 {% if feeds %}
-    <a href="/polls/update_feeds/">Update all feeds</a>
+    <a href="/read/update_feeds/">Update all feeds</a>
     <table>
     {% for feed in feeds %}
         <tr>
             <td>{{feed.name}}</td>
             <!--<td>{{feed.url}}</td>-->
             <td>{{feed.last_updated}}</td>
-            <td><a href="/polls/update_feed/{{feed.id}}">Update</a></td>
+            <td><a href="/read/update_feed/{{feed.id}}">Update</a></td>
         </tr>
     {% endfor %}
     </table>
