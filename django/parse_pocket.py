@@ -4,12 +4,15 @@ import pocket as pckt
 import datetime as dt
 import trafilatura as tf
 import django
+from dotenv import load_dotenv
 
 from django.db.utils import IntegrityError
 from ollama_summarise import summarise_text
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 django.setup()
+
+load_dotenv()
 
 from read.models import Text
 
@@ -18,8 +21,8 @@ def convert_timestamp_to_date(x):
     return d.strftime("%Y-%m-%dT%H:%M:%S+00:00")
 
 p = pckt.Pocket(
-    consumer_key = os.environ["POCKET_CONSUMER_KEY"],
-    access_token = os.environ["POCKET_ACCESS_TOKEN"]
+    consumer_key = os.getenv("POCKET_CONSUMER_KEY"),
+    access_token = os.getenv("POCKET_ACCESS_TOKEN")
 )
 
 pckt_articles = p.retrieve(count=10, state="unread")
@@ -30,6 +33,7 @@ pckt_articles_df = pckt_articles_df.rename(columns = {"resolved_url":"link", "re
 pckt_articles_df_trim = pckt_articles_df[["published", "link", "title", "summary", "item_id"]]
 
 for _, row in pckt_articles_df_trim.iterrows():
+    print(row["title"])
     try:
         html = tf.fetch_url(row["link"])
         txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True)
