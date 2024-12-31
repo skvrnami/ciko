@@ -15,4 +15,4 @@ Co to umí?
 - ukládat označené pasáže z textu (aka výpisky z četby)
 
 Pro koho to je?
-Pro mě. To stačí.
+Pro mě. To stačí. 
