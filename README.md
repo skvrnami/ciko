@@ -1,52 +1,18 @@
 # README
 
-Čiko
+__Čiko__
 
-## features
+(For English use translator or learn Czech. Your choice.)
 
-zdroje
-- [x] správa zdrojů
-- [/] načítání obsahu z:
-    - [x] RSS feedy
-    - [x] newslettery
-    - [x] pocket (https://pypi.org/project/pocket-api/)
-    - [ ] bluesky (https://pypi.org/project/atproto/)
+Když skončil omnivore, aplikace na agregaci RSS feedů, newsletterů a článků uložených k přečtení při brouzdání na internetu (pomocí rozšíření prohlížeče), zklamalo mě to. Místo self-hostování si omnivoru, jsem se rozhodl naprgat si vlastní věc. Výsledkem je Django aplikace + pár skriptů pospojovaných izolepou. Ale funguje to (většinou). Narozdíl od omnivoru to taky umí počítat, kolik jsem toho za den přečetl (+-). 
 
-zobrazení
-- [x] text z trafilatury
-- [ ] načíst web v side panelu
+Jak to funguje?
+- jako každá Django aplikace + `parse_pocket.py` stahuje věci uložené do Pocketu (protože se mi nechtělo dělat vlastní rozšíření prohlížeče)
 
-features
-- [x] to read
-    - [x] pagination
-    - [ ] filtr podle zdroje / domén
-    - [x] reading time
-    - [x] shorten the summary displayed on index / show only llm summary.
-- [x] archiv
-- [x] statistiky přečtení
-    - [ ] graf
-    - [ ] přečtení vs. smazání
-- [x] highlights
-    - [ ] zobrazení highlights v detailu článku
-    - [ ] odstranění highlights
-- [ ] přidání tagů
+Co to umí?
+- ukládat a zobrazovat články získané z RSS feedů
+- ukládat a zobrazovat články uložené přes Pocket
+- ukládat označené pasáže z textu (aka výpisky z četby)
 
-
-vychytávky
-- [x] LLM summary
-- [ ] skórování toho, co mě zajímá
-- [ ] export zvýraznění do obsidianu
-- [ ] fulltext search
-
-output / POSSE ?
-
-
-## dev
-
-Django
-[Reflex](https://reflex.dev/docs/getting-started/basics/)
-
-
-## Inspo
-https://linkding.link
-https://github.com/linkwarden/linkwarden
+Pro koho to je?
+Pro mě. To stačí.
