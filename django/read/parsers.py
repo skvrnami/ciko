@@ -35,8 +35,10 @@ def parse_feed(feed):
         df_entries["published"] = df_entries["published_parsed"].apply(convert_date_parsed)
     elif "updated_parsed" in df_entries.columns:
         df_entries["published"] = df_entries["updated_parsed"].apply(convert_date_parsed)
-    else:
+    elif "published" in df_entries.columns:
         df_entries["published"] = df_entries["published"].apply(convert_date)
+    else:
+        df_entries["published"] = datetime.today()
 
     missing_columns = set(required_columns) - set(df_entries.columns)
 

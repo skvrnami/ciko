@@ -49,6 +49,8 @@ for _, row in pckt_articles_df_trim.iterrows():
             metadata = tf.extract_metadata(html).as_dict()
             summary = summarise_text(txt)
 
+    if metadata["author"] is None:
+        metadata["author"] = "NA"
 
     t = Text(link = row["link"], publication_date = row["published"], author = metadata["author"], title = row["title"], 
              summary = summary, content = txt, source = metadata["sitename"])
@@ -56,7 +58,8 @@ for _, row in pckt_articles_df_trim.iterrows():
         print(t)
         t.save()
         p.archive(row["item_id"]).commit()
-    except IntegrityError:
+    except IntegrityError as e:
+        print(e)
         print("oops ", row["title"], " is already in the DB")
         p.archive(row["item_id"]).commit()
 
