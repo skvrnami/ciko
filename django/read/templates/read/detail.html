@@ -1,7 +1,7 @@
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'read/style.css' %}">
-
+<script src="{% static 'read/dark.js' %}" defer></script>
 
 <div class="menu-bar">
     <a href="{% url 'index' %}">Back home</a>
@@ -24,6 +24,13 @@
 
     <a><button id="save-highlight-btn" type="button">Save Highlight</button></a>
     
+    <div class="dark-mode-toggle">
+        <label class="theme-switch">
+            <input type="checkbox" id="dark-mode-toggle">
+            <span>Dark Mode</span>
+        </label>
+    </div>
+
     <div id="notification-area"></div>
 
 </div>
