@@ -1,21 +1,13 @@
-body {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-ul {
-    width: 60%;
-}
-
-.article {
-    width: 60%;
-}
-
+/* Maintain existing structural CSS */
 body {
     display: flex;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: white;
+    color: black;
 }
+
 .menu-bar {
     position: fixed;
     width: 200px;
@@ -25,6 +17,7 @@ body {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
 }
+
 .menu-bar a {
     display: block;
     text-decoration: none;
@@ -34,16 +27,17 @@ body {
     border-radius: 5px;
     transition: background-color 0.3s;
 }
+
 .menu-bar a:hover {
     background-color: #ddd;
 }
+
 .content {
     flex: 1;
     padding: 20px;
     margin-left: 240px;
     width: 60%;
 }
-
 
 .button {
     display: inline-block;
@@ -56,61 +50,61 @@ body {
     text-align: center;
     cursor: pointer;
 }
+
 .button:hover {
     background-color: #0056b3;
 }
 
+/* Rest of your existing CSS remains the same */
 .row {
     display: flex;
-    align-items: center; /* Align items vertically */
-    justify-content: space-between; /* Add space between items if needed */
+    align-items: center;
+    justify-content: space-between;
 }
 
 span {
-    display: inline-flex; 
+    display: inline-flex;
     align-items: center;
 }
 
 span img {
-    vertical-align: middle; /* Aligns images inline with text */
-    display: inline-block; /* Ensures it's treated as an inline-level element */
+    vertical-align: middle;
+    display: inline-block;
 }
 
 .summary img {
-    max-width: 50px; 
-    max-height: 50px; 
-    width: auto; 
-    height: auto; 
-}
-
-.content img {
-    max-width: 600px; 
-    max-height: 400px; 
+    max-width: 50px;
+    max-height: 50px;
     width: auto;
     height: auto;
 }
 
+.content img {
+    max-width: 600px;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+}
 
 .pagination {
-    margin: 0 auto; 
-    text-align: center; 
-    /* align-items: center; */
+    margin: 0 auto;
+    text-align: center;
 }
 
 #notification-area {
-    position: absolute; 
-    bottom: 50px; /* Distance from the bottom of the menu bar */
-    left: 20px; 
-    right: 20px; 
+    position: absolute;
+    bottom: 50px;
+    left: 20px;
+    right: 20px;
     background-color: #f8d7da;
-    color: #721c24; 
-    border: 1px solid #f5c6cb; 
-    padding: 10px 15px; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    font-size: 14px; 
-    z-index: 1000; 
-    display: none; 
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    z-index: 1000;
+    display: none;
 }
 
 .source-filters {
@@ -128,4 +122,44 @@ span img {
     background-color: #007bff;
     color: white;
     border-radius: 3px;
+}
+
+.dark-mode {
+    background-color: #2A2232;
+    color: #D7CDDF;
+}
+
+.dark-mode .menu-bar {
+    background-color: #362B3E;
+    color: #D7CDDF;
+}
+
+.dark-mode .menu-bar a {
+    color: #D7CDDF;
+}
+
+.dark-mode .menu-bar a:hover {
+    background-color: #555;
+}
+
+.dark-mode .button {
+    background-color: #0056b3;
+}
+
+.dark-mode .button:hover {
+    background-color: #003d80;
+}
+
+.dark-mode .pagination a {
+    color: #D7CDDF;
+}
+
+.dark-mode #notification-area {
+    background-color: #333;
+    color: #ffcccc;
+    border-color: #ff9999;
+}
+
+.dark-mode a {
+    color: #8A96E5
 }

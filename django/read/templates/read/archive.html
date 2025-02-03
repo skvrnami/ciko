@@ -12,6 +12,7 @@
     <a href="{% url 'stats' %}">Stats</a>
     <a href="{% url 'trash' %}">Trash</a>
 
+    <!-- Dark Mode Toggle -->
     <div class="dark-mode-toggle">
         <label class="theme-switch">
             <input type="checkbox" id="dark-mode-toggle">
@@ -26,11 +27,11 @@
 
 <div class="source-filters">
     <h3>Sources</h3>
-    <a href="{% url 'index' %}" class="{% if not selected_source %}active{% endif %}">
+    <a href="/read/archive" class="{% if not selected_source %}active{% endif %}">
         All Sources
     </a>
     {% for source in source_counts %}
-    <a href="{% url 'index' %}?source={{ source.source }}" 
+    <a href="/read/archive?source={{ source.source }}" 
        class="{% if selected_source == source.source %}active{% endif %}">
         {{ source.source }} ({{ source.count }})
     </a>
@@ -85,3 +86,4 @@
 </div>
 
 </div>
+

@@ -34,6 +34,7 @@ pckt_articles_df_trim = pckt_articles_df[["published", "link", "title", "summary
 
 for _, row in pckt_articles_df_trim.iterrows():
     print(row["title"])
+    metadata = {}
     try:
         html = tf.fetch_url(row["link"])
         txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True)
@@ -42,24 +43,36 @@ for _, row in pckt_articles_df_trim.iterrows():
     except:
         try:
             txt = tf.extract(html, output_format = "html", include_images=True)
-            metadata = tf.extract_metadata(html).as_dict()
-            summary = summarise_text(txt)
+            if html is not None:
+                metadata = tf.extract_metadata(html).as_dict()
+                summary = summarise_text(txt)
+            else:
+                pass
         except:
             txt = tf.extract(html)
             metadata = tf.extract_metadata(html).as_dict()
             summary = summarise_text(txt)
 
-    if metadata["author"] is None:
-        metadata["author"] = "NA"
+    if txt is None:
+        print("No text found")
+        pass
+    else:
+        if metadata is not None:
+            if "author" not in metadata.keys():
+                metadata["author"] = "NA"
+        if metadata is None:
+            metadata["author"] = "NA"
+            metadata["sitename"] = "NA"
 
-    t = Text(link = row["link"], publication_date = row["published"], author = metadata["author"], title = row["title"], 
-             summary = summary, content = txt, source = metadata["sitename"])
-    try:
-        print(t)
-        t.save()
-        p.archive(row["item_id"]).commit()
-    except IntegrityError as e:
-        print(e)
-        print("oops ", row["title"], " is already in the DB")
-        p.archive(row["item_id"]).commit()
+        t = Text(link = row["link"], publication_date = row["published"], author = metadata["author"], title = row["title"], 
+                summary = summary, content = txt, source = metadata["sitename"])
+            
+        try:
+            print(t)
+            t.save()
+            p.archive(row["item_id"]).commit()
+        except IntegrityError as e:
+            print(e)
+            print("oops ", row["title"], " is already in the DB")
+            p.archive(row["item_id"]).commit()
 

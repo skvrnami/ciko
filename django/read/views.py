@@ -54,15 +54,36 @@ def index(request):
     return render(request, "read/index.html", context)
 
 def archive(request):
-    archived_texts = Text.objects.filter(Q(read=True)).order_by("-read_date")
+    selected_source = request.GET.get('source')
+    base_query = Text.objects.filter(Q(read=True)).order_by("-read_date")
+    source_counts = base_query.values('source').annotate(
+        count=Count('id')
+    ).order_by('source')
+    
+    if selected_source:
+        latest_texts = base_query.filter(source=selected_source)
+    else:
+        latest_texts = base_query
+    
+    latest_texts = latest_texts.order_by("-publication_date")
+
+    for text in latest_texts:
+        text.reading_time = estimate_reading_time(bleach_text(text.content))
+
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(archived_texts, 10)
+    paginator = Paginator(latest_texts, 10)
     try:
         texts = paginator.get_page(page_number)
     except Http404:
         texts = None
-    
-    return render(request, "read/index.html", {"latest_texts": texts})
+
+    context = {
+        "latest_texts": texts,
+        "source_counts": source_counts,
+        "selected_source": selected_source,
+    }
+
+    return render(request, "read/archive.html", context)
 
 def trash(request):
     trashed_texts = Text.objects.filter(Q(deleted=True)).order_by("-id")

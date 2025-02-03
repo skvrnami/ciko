@@ -1,6 +1,7 @@
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'read/style.css' %}">
+<script src="{% static 'read/dark.js' %}" defer></script>
 
 <div class="menu-bar">
     <h3>Menu</h3>
@@ -10,6 +11,13 @@
     <a href="{% url 'feeds' %}">Feeds</a>
     <a href="{% url 'stats' %}">Stats</a>
     <a href="{% url 'trash' %}">Trash</a>
+
+    <div class="dark-mode-toggle">
+        <label class="theme-switch">
+            <input type="checkbox" id="dark-mode-toggle">
+            <span>Dark Mode</span>
+        </label>
+    </div>
 </div>
 
 
