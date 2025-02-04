@@ -15,17 +15,18 @@ ul {
     width: 60%;
 }
 
-.menu-bar {
-    position: fixed;
+.sidebar {
     width: 200px;
-    background-color: #f4f4f4;
-    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
     height: 100vh;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 12px;
     overflow-y: auto;
 }
 
-.menu-bar a {
+.sidebar a {
     display: block;
     text-decoration: none;
     color: #333;
@@ -35,15 +36,17 @@ ul {
     transition: background-color 0.3s;
 }
 
-.menu-bar a:hover {
+.sidebar a:hover {
     background-color: #ddd;
 }
 
 .content {
     flex: 1;
     padding: 20px;
-    margin-left: 240px;
-    width: 60%;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin: 12px;
 }
 
 .button {
@@ -132,20 +135,28 @@ span img {
 }
 
 .dark-mode {
-    background-color: #2A2232;
-    color: #D7CDDF;
-}
-
-.dark-mode .menu-bar {
     background-color: #362B3E;
     color: #D7CDDF;
 }
 
-.dark-mode .menu-bar a {
+.dark-mode .sidebar {
+    background-color: #2A2232;
+    border: 1px solid #483357;
     color: #D7CDDF;
 }
 
-.dark-mode .menu-bar a:hover {
+.dark-mode .content {
+    background-color: #2A2232;
+    border: 1px solid #483357;
+    color: #D7CDDF;
+}
+
+
+.dark-mode .sidebar a {
+    color: #D7CDDF;
+}
+
+.dark-mode .sidebar a:hover {
     background-color: #555;
 }
 

@@ -3,7 +3,8 @@
 <link rel="stylesheet" href="{% static 'read/style.css' %}">
 <script src="{% static 'read/dark.js' %}" defer></script>
 
-<div class="menu-bar">
+<body>
+<div class="sidebar">
     <h3>Menu</h3>
     <a href="{% url 'index' %}">To read</a>
     <a href="{% url 'archive' %}">Archive</a>
@@ -22,66 +23,65 @@
 
 <div class="content">
 
-<h1>Items</h1>
+    <h1>Items</h1>
 
-<div class="source-filters">
-    <h3>Sources</h3>
-    <a href="{% url 'index' %}" class="{% if not selected_source %}active{% endif %}">
-        All Sources
-    </a>
-    {% for source in source_counts %}
-    <a href="{% url 'index' %}?source={{ source.source }}" 
-       class="{% if selected_source == source.source %}active{% endif %}">
-        {{ source.source }} ({{ source.count }})
-    </a>
-    {% endfor %}
-</div>
+    <div class="source-filters">
+        <h3>Sources</h3>
+        <a href="{% url 'index' %}" class="{% if not selected_source %}active{% endif %}">
+            All Sources
+        </a>
+        {% for source in source_counts %}
+        <a href="{% url 'index' %}?source={{ source.source }}" 
+        class="{% if selected_source == source.source %}active{% endif %}">
+            {{ source.source }} ({{ source.count }})
+        </a>
+        {% endfor %}
+    </div>
 
-{% if latest_texts %}
-    <ul>
-    {% for text in latest_texts %}
-        <li>
-            <div>
-                <a href="/read/article/{{ text.id }}/">{{ text.title }}</a>
-            </div>
-            <div>
-                {{text.publication_date}} | {{ text.source }} | {{text.reading_time}} min | 
-                <a href="{% url 'deleted' text.id %}">Delete</a> / 
-                <a href="{% url 'read' text.id %}">Mark as read</a>
-            </div>
-            <div class="row">
-                <div class="perex">{{text.summary | safe}}</div>
-            </div>
-        </tr> 
-        </span>
-        <br/>
-        </li>
-        <br/>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No texts are available.</p>
-{% endif %}
-
-<div class="pagination">
-    <!-- Previous Page -->
-    {% if latest_texts.has_previous %}
-        <a href="?page={{ latest_texts.previous_page_number }}">Previous</a>
+    {% if latest_texts %}
+        <ul>
+        {% for text in latest_texts %}
+            <li>
+                <div>
+                    <a href="/read/article/{{ text.id }}/">{{ text.title }}</a>
+                </div>
+                <div>
+                    {{text.publication_date}} | {{ text.source }} | {{text.reading_time}} min | 
+                    <a href="{% url 'deleted' text.id %}">Delete</a> / 
+                    <a href="{% url 'read' text.id %}">Mark as read</a>
+                </div>
+                <div class="row">
+                    <div class="perex">{{text.summary | safe}}</div>
+                </div>
+            <br/>
+            </li>
+            <br/>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No texts are available.</p>
     {% endif %}
 
-    <!-- Page Numbers -->
-    {% for num in latest_texts.paginator.page_range %}
-        {% if latest_texts.number == num %}
-            <strong>{{ num }}</strong>
-        {% else %}
-            <a href="?page={{ num }}">{{ num }}</a>
+    <div class="pagination">
+        <!-- Previous Page -->
+        {% if latest_texts.has_previous %}
+            <a href="?page={{ latest_texts.previous_page_number }}">Previous</a>
         {% endif %}
-    {% endfor %}
 
-    <!-- Next Page -->
-    {% if latest_texts.has_next %}
-        <a href="?page={{ latest_texts.next_page_number }}">Next</a>
-    {% endif %}
-</div>
+        <!-- Page Numbers -->
+        {% for num in latest_texts.paginator.page_range %}
+            {% if latest_texts.number == num %}
+                <strong>{{ num }}</strong>
+            {% else %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Next Page -->
+        {% if latest_texts.has_next %}
+            <a href="?page={{ latest_texts.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
 
 </div>
+</body>
