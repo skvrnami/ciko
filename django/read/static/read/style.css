@@ -1,12 +1,45 @@
-/* Maintain existing structural CSS */
 body {
     display: flex;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: white;
+    background-color: #F9F5FA;
     color: black;
 }
+
+/* 
+.main-container {
+    position: relative;
+}
+  
+.main-container .sidebar {
+    position: sticky;
+    top: 0;
+}
+*/
+
+.sidebar {
+    position: sticky;
+    top: 12px; /* matches your margin */
+    height: calc(97vh - 24px); 
+    width: 200px;
+    background-color: #ffffff;
+    border: 1px solid #E5DEEB;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 12px 0px 12px 12px;
+    overflow-y: auto;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #E5DEEB;
+    border-radius: 8px;
+    margin: 12px;
+}
+
 
 ul {
     width: 60%;
@@ -15,16 +48,6 @@ ul {
     width: 60%;
 }
 
-.sidebar {
-    width: 200px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    height: 100vh;
-    padding: 20px;
-    margin: 12px;
-    overflow-y: auto;
-}
 
 .sidebar a {
     display: block;
@@ -38,15 +61,6 @@ ul {
 
 .sidebar a:hover {
     background-color: #ddd;
-}
-
-.content {
-    flex: 1;
-    padding: 20px;
-    background-color: white;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    margin: 12px;
 }
 
 .button {
