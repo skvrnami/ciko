@@ -1,6 +1,6 @@
 body {
     display: flex;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: -apple-system, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #F9F5FA;
@@ -149,20 +149,18 @@ span img {
 }
 
 .dark-mode {
-    background-color: #362B3E;
-    color: #D7CDDF;
+    background-color: #1a1b2e;;
+    color: #e2e2f0;
 }
 
 .dark-mode .sidebar {
-    background-color: #2A2232;
-    border: 1px solid #483357;
-    color: #D7CDDF;
+    background-color: #232438;
+    border: 1px solid #363755;
 }
 
 .dark-mode .content {
-    background-color: #2A2232;
-    border: 1px solid #483357;
-    color: #D7CDDF;
+    background-color: #232438;
+    border: 1px solid #363755;
 }
 
 

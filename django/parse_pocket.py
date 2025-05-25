@@ -25,7 +25,7 @@ p = pckt.Pocket(
     access_token = os.getenv("POCKET_ACCESS_TOKEN")
 )
 
-pckt_articles = p.retrieve(count=10, state="unread")
+pckt_articles = p.retrieve(count=5, state="unread")
 pckt_articles_df = pd.DataFrame.from_dict(pckt_articles["list"], orient = "index")
 
 pckt_articles_df["published"] = pckt_articles_df["time_added"].apply(convert_timestamp_to_date)
@@ -63,6 +63,9 @@ for _, row in pckt_articles_df_trim.iterrows():
         if metadata is None:
             metadata["author"] = "NA"
             metadata["sitename"] = "NA"
+
+        if metadata["author"] is None:
+            metadata["author"] = "NA"
 
         t = Text(link = row["link"], publication_date = row["published"], author = metadata["author"], title = row["title"], 
                 summary = summary, content = txt, source = metadata["sitename"])

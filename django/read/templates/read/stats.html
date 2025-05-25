@@ -8,6 +8,7 @@
     <a href="{% url 'index' %}">To read</a>
     <a href="{% url 'archive' %}">Archive</a>
     <a href="{% url 'highlights' %}">Highlights</a>
+    <a href="{% url 'feeds' %}">Feeds</a>
     <a href="{% url 'stats' %}">Stats</a>
     <a href="{% url 'trash' %}">Trash</a>
 
@@ -24,7 +25,30 @@
 <h1>Stats</h1>
 
 <div>
-    {{ df_html|safe }}
+    Long-term average is: {{ average|safe }} pages/day.
+    
+    <div class="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const data = JSON.parse('{{ data|safe }}');
+        
+        new Chart(ctx, {
+            type: 'line',  // or 'bar', 'pie', etc.
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Read NS',
+                    data: data.values,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            }
+        });
+    </script>
 </div>
 
 </div>

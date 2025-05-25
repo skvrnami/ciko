@@ -30,7 +30,7 @@
         All Sources
     </a>
     {% for source in source_counts %}
-    <a href="/read/archive?source={{ source.source }}" 
+    <a href="/read/archive?source={{ source.source|urlencode }}" 
        class="{% if selected_source == source.source %}active{% endif %}">
         {{ source.source }} ({{ source.count }})
     </a>

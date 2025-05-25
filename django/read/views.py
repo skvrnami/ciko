@@ -9,8 +9,8 @@ from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Text, Highlight, RssFeed
-from .stats import summarise_read_articles
-from .parsers import parse_feed
+from .stats import summarise_read_articles, graph_last_30_days
+from .parsers import parse_feed, parse_link
 from .utils import estimate_reading_time, bleach_text
 
 def index(request):
@@ -125,9 +125,14 @@ def deleted(request, text_id):
 def stats(request):
     read_texts = Text.objects.filter(Q(read=True))
     df = summarise_read_articles(read_texts)
-    df_html = df.to_html(classes='table table-striped table-bordered')
+    avg = round(df["content_length_ns"].mean(), 1)
+    data = graph_last_30_days(read_texts)
+    chart_data = {
+        'labels': data['date'].tolist(),
+        'values': data['sum_ns'].tolist()
+    }
 
-    return render(request, "read/stats.html", {'df_html': df_html})
+    return render(request, "read/stats.html", {'data': json.dumps(chart_data, default=str), 'average': avg})
 
 def highlights(request):
     hs = Highlight.objects.select_related('text').all().order_by("-created_at")
@@ -153,8 +158,16 @@ def update_feeds(request):
         RssFeed.objects.filter(Q(id=feed.id)).update(last_updated=updated)
 
     return redirect("index")
-    
 
+@csrf_exempt
+def save_link(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        url = data.get("url")
+        print(url)
+        parsed_link = parse_link(url)    
+
+    return redirect("index")
 
 @csrf_exempt
 def add_highlight(request, text_id):

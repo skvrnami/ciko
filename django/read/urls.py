@@ -15,4 +15,5 @@ urlpatterns = [
     path("highlights/", views.highlights, name='highlights'),
     path("update_feed/<int:feed_id>", views.update_feed, name="update_feed"),
     path("update_feeds/", views.update_feeds, name="update_feeds"),
+    path("save_link/", views.save_link, name="save_link")
 ]

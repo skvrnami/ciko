@@ -1,6 +1,8 @@
 import pandas as pd
 
 from .utils import bleach_text
+from datetime import datetime, timedelta
+from siuba import _, tbl, filter, mutate, group_by, summarize, select
 
 def summarise_read_articles(read_texts):
     df = pd.DataFrame(
@@ -19,3 +21,30 @@ def summarise_read_articles(read_texts):
     ).reset_index()
 
     return summary
+
+
+def graph_last_30_days(read_texts):
+    df = pd.DataFrame(
+        list(
+            read_texts.values(
+                "title", "read_date", "content"
+            )
+        )
+    )
+
+    d = (datetime.today() - timedelta(days=30)).date()
+    
+    data = (df >> 
+        mutate(date = _.read_date.dt.date) >>
+        filter(_.date > d)
+    )
+
+    data['sanitized_content'] = data['content'].apply(lambda x: bleach_text(x))
+
+    data = (data >> 
+        group_by(_.date) >>
+        summarize(sum_ns = _.sanitized_content.str.len().sum() / 1800) >>
+        select(_.date, _.sum_ns)     
+    )
+
+    return data

@@ -96,4 +96,49 @@ def parse_feed(feed):
     
     return datetime.now()
 
+def parse_link(url):
+    try:
+        html = tf.fetch_url(url)
+        txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True)
+        metadata = tf.extract_metadata(html).as_dict()
+        summary = summarise_text(txt)
+    except:
+        try:
+            txt = tf.extract(html, output_format = "html", include_images=True)
+            if html is not None:
+                metadata = tf.extract_metadata(html).as_dict()
+                summary = summarise_text(txt)
+            else:
+                pass
+        except:
+            txt = tf.extract(html)
+            metadata = tf.extract_metadata(html).as_dict()
+            summary = summarise_text(txt)
+
+    if txt is None:
+        print("No text found")
+        pass
+    else:
+        if metadata is not None:
+            if "author" not in metadata.keys():
+                metadata["author"] = "NA"
+        if metadata is None:
+            metadata["author"] = "NA"
+            metadata["sitename"] = "NA"
+
+        if metadata["author"] is None:
+            metadata["author"] = "NA"
+
+        t = Text(link = url, publication_date = metadata["date"], author = metadata["author"], title = metadata["title"], 
+                 summary = summary, content = txt, source = metadata["sitename"])
+            
+        try:
+            print(t)
+            t.save()
+        except IntegrityError as e:
+            print(e)
+            print("oops ", url, " is already in the DB")
+    
+    return datetime.now()
+
 # def parse_pocket(last_updated)

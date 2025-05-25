@@ -3,3 +3,4 @@ pocket-api
 feedparser
 trafilatura
 django
+siuba

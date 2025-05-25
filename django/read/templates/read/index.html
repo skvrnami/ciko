@@ -25,13 +25,21 @@
 
     <h1>Items</h1>
 
+    <div class="add-link-section">
+        <h3>Add New Link</h3>
+        <form id="add-link-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <input type="url" id="url-input" placeholder="Enter URL to save..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" required>
+        <button type="submit" style="padding: 8px 16px; background-color: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer;">Add Link</button>
+        </form>
+    </div>
+
     <div class="source-filters">
         <h3>Sources</h3>
         <a href="{% url 'index' %}" class="{% if not selected_source %}active{% endif %}">
             All Sources
         </a>
         {% for source in source_counts %}
-        <a href="{% url 'index' %}?source={{ source.source }}" 
+        <a href="{% url 'index' %}?source={{ source.source|urlencode }}" 
         class="{% if selected_source == source.source %}active{% endif %}">
             {{ source.source }} ({{ source.count }})
         </a>
@@ -84,4 +92,32 @@
     </div>
 
 </div>
+
+<script>
+    document.getElementById('add-link-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const urlInput = document.getElementById('url-input');
+        const url = urlInput.value.trim();
+        
+        if (url) {
+
+            fetch("/read/save_link/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'url': url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'error') {
+                    displayMessage(data.message.content, true); 
+                } else {
+                    displayMessage(data.message.content, false);
+                }
+            });
+        }
+    });
+</script>
+
 </body>
