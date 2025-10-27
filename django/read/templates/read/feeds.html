@@ -34,6 +34,13 @@
             <!--<td>{{feed.url}}</td>-->
             <td>{{feed.last_updated}}</td>
             <td><a href="/read/update_feed/{{feed.id}}">Update</a></td>
+            <td>
+                {% if feed.should_update %}
+                    <a href="/read/change_feed_updates/{{feed.id}}">Disable updates</a>
+                {% else %}
+                    <a href="/read/change_feed_updates/{{feed.id}}">Enable updates</a>
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
     </table>

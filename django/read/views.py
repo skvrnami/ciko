@@ -140,7 +140,7 @@ def highlights(request):
     return render(request, "read/highlights.html", {"highlights": hs})
 
 def feeds(request):
-    feeds = RssFeed.objects.all().order_by("-last_updated")
+    feeds = RssFeed.objects.all().order_by("-should_update", "name")
 
     return render(request, "read/feeds.html", {"feeds": feeds})
 
@@ -152,12 +152,19 @@ def update_feed(request, feed_id):
     return redirect("index")
 
 def update_feeds(request):
-    feeds = RssFeed.objects.all()
+    feeds = RssFeed.objects.filter(should_update=True)
     for feed in feeds:
         updated = parse_feed(feed)
         RssFeed.objects.filter(Q(id=feed.id)).update(last_updated=updated)
 
     return redirect("index")
+
+def change_feed_updates(request, feed_id):
+    feed = RssFeed.objects.filter(Q(id=feed_id))[0]
+    feed.should_update = not feed.should_update
+    feed.save()
+
+    return redirect("feeds")
 
 @csrf_exempt
 def save_link(request):

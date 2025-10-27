@@ -13,7 +13,8 @@ urlpatterns = [
     path("stats/", views.stats, name='stats'),
     path("feeds/", views.feeds, name='feeds'),
     path("highlights/", views.highlights, name='highlights'),
-    path("update_feed/<int:feed_id>", views.update_feed, name="update_feed"),
+    path("update_feed/<int:feed_id>/", views.update_feed, name="update_feed"),
     path("update_feeds/", views.update_feeds, name="update_feeds"),
+    path("change_feed_updates/<int:feed_id>/", views.change_feed_updates, name="change_feed_updates"),
     path("save_link/", views.save_link, name="save_link")
 ]

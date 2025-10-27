@@ -28,6 +28,7 @@ class RssFeed(models.Model):
     id = models.IntegerField("id", primary_key=True)
     name = models.CharField(max_length=200)
     url = models.CharField(max_length=200)
+    should_update = models.BooleanField(default=True)
     last_updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

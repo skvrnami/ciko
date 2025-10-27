@@ -131,6 +131,141 @@ span img {
     display: none;
 }
 
+.highlight-button,
+#save-highlight-btn {
+    background: linear-gradient(90deg, #ffd86b 0%, #ff7a7a 100%);
+    color: #1b1b1b;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+
+    /* remove visible border overlaying the gradient */
+    border: 0px solid transparent;
+    background-clip: padding-box;
+    -webkit-background-clip: padding-box;
+
+    /* keep soft border look via box-shadow (no hard color stripe) */
+    box-shadow:
+        0 6px 18px rgba(255,122,122,0.15),
+        0 0 0 1px rgba(0,0,0,0.04) inset;
+
+    font-weight: 600;
+    letter-spacing: 0.15px;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    user-select: none;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* malá ikona před textem */
+.highlight-button::before {
+    content: "★";
+    color: rgba(27,27,27,0.9);
+    font-size: 0.95rem;
+    transform: translateY(-1px);
+}
+
+/* hover / active / focus */
+.highlight-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(255,122,122,0.18);
+    filter: brightness(1.03);
+}
+
+.highlight-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.highlight-button:focus {
+    outline: 3px solid rgba(255,216,107,0.25);
+    outline-offset: 3px;
+}
+
+/* disabled state */
+.highlight-button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* zmenšení rozestupu když je tlačítko v <a> */
+.sidebar a > .highlight-button,
+.sidebar a > #save-highlight-btn {
+    margin: 0.25rem 0;
+}
+
+/* updated regular buttons to match highlight style */
+.button,
+button {
+    background: linear-gradient(90deg, #6dd3ff 0%, #7b61ff 100%);
+    color: #ffffff;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+
+    /* same fix: transparent border + background-clip */
+    border: 0px solid transparent;
+    background-clip: padding-box;
+    -webkit-background-clip: padding-box;
+
+    box-shadow:
+        0 6px 18px rgba(123,97,255,0.12),
+        0 0 0 1px rgba(0,0,0,0.04) inset;
+
+    font-weight: 600;
+    letter-spacing: 0.15px;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
+    user-select: none;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* hover / active / focus */
+.button:hover,
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(123,97,255,0.16);
+    filter: brightness(1.03);
+}
+
+.button:active,
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.button:focus,
+button:focus {
+    outline: 3px solid rgba(123,97,255,0.18);
+    outline-offset: 3px;
+}
+
+/* disabled state */
+.button[disabled],
+button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* spacing for buttons wrapped in links */
+.sidebar a > .button,
+.sidebar a > button {
+    margin: 0.25rem 0;
+}
+
 .source-filters {
     margin-bottom: 20px;
 }
