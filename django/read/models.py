@@ -25,7 +25,7 @@ class Highlight(models.Model):
         return f"Highlight from {self.text.title}"
     
 class RssFeed(models.Model):
-    id = models.IntegerField("id", primary_key=True)
+    id = models.IntegerField("id", primary_key=True, auto_created=True)
     name = models.CharField(max_length=200)
     url = models.CharField(max_length=200)
     should_update = models.BooleanField(default=True)

@@ -25,6 +25,21 @@
 
 <h1>Feeds</h1>
 
+<form id="add-feed" method="post" class="add-feed-form">
+    {% csrf_token %}
+    <div>
+        <label for="feed-name">Name</label><br>
+        <input id="feed-name" name="name" type="text" required maxlength="200">
+    </div>
+    <div>
+        <label for="feed-url">URL</label><br>
+        <input id="feed-url" name="url" type="url" required maxlength="200">
+    </div>
+    <div style="margin-top: 15px;">
+        <button type="submit" class="button">Add Feed</button>
+    </div>
+</form>
+
 {% if feeds %}
     <a href="/read/update_feeds/">Update all feeds</a>
     <table>
@@ -47,5 +62,33 @@
 {% else %}
     <p>No feeds are available.</p>
 {% endif %}
+
+<script>
+    document.getElementById('add-feed').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nameInput = document.getElementById('feed-name');
+        const urlInput = document.getElementById('feed-url');
+        const name = nameInput.value.trim();
+        const url = urlInput.value.trim();
+
+        if (name && url) {
+            fetch("/read/add_feed/", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'name': name, 'url': url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'error') {
+                    displayMessage(data.message.content, true);
+                } else {
+                    displayMessage(data.message.content, false);
+                }
+            });
+        }
+    });
+</script>
 
 </div>

@@ -38,6 +38,15 @@ def index(request):
     for text in latest_texts:
         text.reading_time = estimate_reading_time(bleach_text(text.content))
 
+    order = request.GET.get('order')
+    if order:
+        items = list(latest_texts)  # evaluate queryset
+        for text in items:
+            text.reading_time = estimate_reading_time(bleach_text(text.content))
+        reverse = (order != 'asc')
+        items.sort(key=lambda t: (t.reading_time or 0), reverse=reverse)
+        latest_texts = items
+        
     page_number = request.GET.get('page', 1)
     paginator = Paginator(latest_texts, 10)
     try:
@@ -167,6 +176,13 @@ def change_feed_updates(request, feed_id):
     return redirect("feeds")
 
 @csrf_exempt
+def add_feed(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        
+    return redirect("index")
+
+@csrf_exempt
 def save_link(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -191,3 +207,21 @@ def add_highlight(request, text_id):
         return JsonResponse({'status': 'error', 'message': 'No content provided.'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+def highlights_json(request):
+    """
+    Vrátí seznam highlightů jako JSON.
+    Každý záznam obsahuje: id, text_id, text_title, content, created_at (ISO).
+    """
+    hs = Highlight.objects.select_related('text').all().order_by('-created_at')
+    data = []
+    for h in hs:
+        data.append({
+            'id': h.id,
+            'text_id': h.text.id,
+            'text_title': h.text.title,
+            'text_url': h.text.link,
+            'content': h.content,
+            'created_at': h.created_at.isoformat() if h.created_at else None,
+        })
+    return JsonResponse(data, safe=False)

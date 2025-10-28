@@ -328,3 +328,59 @@ button[disabled] {
 .dark-mode a {
     color: #8A96E5
 }
+
+/* make add-feed form display in one line */
+.add-feed-form {
+    display: flex;
+    flex-wrap: wrap;            /* umožní zalomení na mobilu */
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.add-feed-form > div {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+/* labels nad vstupy mohou být zmenšené, aby nezabíraly místo */
+.add-feed-form label {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+/* consistent input sizing */
+.add-feed-form input[type="text"],
+.add-feed-form input[type="url"] {
+    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid #e6e2ea;
+    min-width: 220px;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+/* tlačítko zarovnané na stejnou úroveň */
+.add-feed-form button.button {
+    padding: 0.5rem 0.9rem;
+    margin-top: 0; /* odstraní případný vertikální offset */
+}
+
+/* pro velmi úzké obrazovky necháme vstupy zabírat plnou šířku */
+@media (max-width: 520px) {
+    .add-feed-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .add-feed-form input[type="text"],
+    .add-feed-form input[type="url"] {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .add-feed-form button.button {
+        width: 100%;
+    }
+}

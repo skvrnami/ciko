@@ -46,6 +46,20 @@
         {% endfor %}
     </div>
 
+    {% with curr_order=request.GET.order %}
+    <div class="ordering" style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+        <span style="font-weight:600;">Order:</span>
+
+        {% if curr_order == '' %}
+            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}order=asc">Order ▲</a>
+        {% elif curr_order == 'asc' %}
+            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}order=desc">Order ▼</a>
+        {% else %}
+            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}">Cancel ordering</a>
+        {% endif %}
+    </div>
+    {% endwith %}
+
     {% if latest_texts %}
         <ul>
         {% for text in latest_texts %}
@@ -73,7 +87,7 @@
     <div class="pagination">
         <!-- Previous Page -->
         {% if latest_texts.has_previous %}
-            <a href="?page={{ latest_texts.previous_page_number }}">Previous</a>
+            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}page={{ latest_texts.previous_page_number }}">Previous</a>
         {% endif %}
 
         <!-- Page Numbers -->
@@ -81,13 +95,13 @@
             {% if latest_texts.number == num %}
                 <strong>{{ num }}</strong>
             {% else %}
-                <a href="?page={{ num }}">{{ num }}</a>
+                <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}page={{ num }}">{{ num }}</a>
             {% endif %}
         {% endfor %}
 
         <!-- Next Page -->
         {% if latest_texts.has_next %}
-            <a href="?page={{ latest_texts.next_page_number }}">Next</a>
+            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}page={{ latest_texts.next_page_number }}">Next</a>
         {% endif %}
     </div>
 
