@@ -179,6 +179,11 @@ def change_feed_updates(request, feed_id):
 def add_feed(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        RssFeed.objects.create(
+            name=data.get("name"),
+            url=data.get("url"),
+            should_update=True
+        )
         
     return redirect("index")
 
