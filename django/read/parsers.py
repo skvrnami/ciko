@@ -7,6 +7,7 @@ import trafilatura as tf
 
 from datetime import datetime
 from django.db.utils import IntegrityError
+from django.db.models import Q
 from ollama_summarise import summarise_text
 from .models import Text
 from .utils import bleach_text
@@ -23,6 +24,9 @@ def convert_date(x):
 
 def convert_date_parsed(x):
     return datetime.fromtimestamp(time.mktime(x))
+
+def escape_text(x):
+    return x.replace("&#8217;", "\'").replace("&#8220;", "").replace("&#8221;", "").replace("&#8216;", "\'")
 
 def parse_feed(feed):
     feed_entries = fp.parse(feed.url)
@@ -48,6 +52,8 @@ def parse_feed(feed):
     df_entries_trim = df_entries[required_columns]
 
     for _, row in df_entries_trim.iterrows():
+        if len(Text.objects.filter(Q(link=row["link"]))) > 0:
+            continue
         if row["content"] == "":
             try:
                 html = tf.fetch_url(row["link"])
@@ -77,16 +83,16 @@ def parse_feed(feed):
         else:
             try:
                 html = tf.fetch_url(row["link"])
-                txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True)
+                txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True, favor_recall=True)
             except:
                 txt = row["summary"]
 
         if len(row["summary"]) > 500:
             bleached_summary = bleach.clean(row["summary"], tags={'b', 'i'}, strip=True)
             row["summary"] = bleached_summary[0:500] + "[...]"
-        
+
         t = Text(link = row["link"], publication_date = row["published"], author = row["author"], 
-                 title = row["title"], summary = row["summary"], content = txt, source = feed.name)
+                 title = escape_text(row["title"]), summary = row["summary"], content = txt, source = feed.name)
         try:
             print(t)
             t.save()
@@ -99,12 +105,12 @@ def parse_feed(feed):
 def parse_link(url):
     try:
         html = tf.fetch_url(url)
-        txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True)
+        txt = tf.extract(html, output_format = "html", include_links=True, include_images=True, include_formatting=True, favor_recall=True)
         metadata = tf.extract_metadata(html).as_dict()
         summary = summarise_text(txt)
     except:
         try:
-            txt = tf.extract(html, output_format = "html", include_images=True)
+            txt = tf.extract(html, output_format = "html", include_images=True, favor_recall=True)
             if html is not None:
                 metadata = tf.extract_metadata(html).as_dict()
                 summary = summarise_text(txt)

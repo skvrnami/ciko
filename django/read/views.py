@@ -58,6 +58,7 @@ def index(request):
         "latest_texts": texts,
         "source_counts": source_counts,
         "selected_source": selected_source,
+        "url": ""
     }
 
     return render(request, "read/index.html", context)

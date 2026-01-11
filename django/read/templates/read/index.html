@@ -1,6 +1,7 @@
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'read/style.css' %}">
+<link rel="icon" type="image/x-icon" href="{% static 'read/favicon.ico' %}">
 <script src="{% static 'read/dark.js' %}" defer></script>
 
 <body>
@@ -28,7 +29,7 @@
     <div class="add-link-section">
         <h3>Add New Link</h3>
         <form id="add-link-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
-        <input type="url" id="url-input" placeholder="Enter URL to save..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" required>
+        <input type="url" id="url-input" placeholder="Enter URL to save..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" value="{{ url }}" required>
         <button type="submit" style="padding: 8px 16px; background-color: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer;">Add Link</button>
         </form>
     </div>
@@ -128,6 +129,7 @@
                     displayMessage(data.message.content, true); 
                 } else {
                     displayMessage(data.message.content, false);
+                    urlInput.value = '';
                 }
             });
         }

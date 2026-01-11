@@ -85,6 +85,8 @@
                     displayMessage(data.message.content, true);
                 } else {
                     displayMessage(data.message.content, false);
+                    nameInput.value = '';
+                    urlInput.value = '';
                 }
             });
         }
