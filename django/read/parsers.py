@@ -7,6 +7,7 @@ import trafilatura as tf
 
 from datetime import datetime
 from django.db.utils import IntegrityError
+from django.utils import timezone
 from django.db.models import Q
 from ollama_summarise import summarise_text
 from .models import Text
@@ -100,7 +101,7 @@ def parse_feed(feed):
             print("oops ", row["title"], " is already in the DB")
         
     
-    return datetime.now()
+    return timezone.now()
 
 def parse_link(url):
     try:
@@ -148,6 +149,6 @@ def parse_link(url):
             print(e)
             print("oops ", url, " is already in the DB")
     
-    return datetime.now()
+    return timezone.now()
 
 # def parse_pocket(last_updated)
