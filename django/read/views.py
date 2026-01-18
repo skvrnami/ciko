@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q, Count
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
+from asgiref.sync import sync_to_async
 
 from .models import Text, Highlight, RssFeed
 from .stats import summarise_read_articles, graph_last_30_days
@@ -189,12 +190,12 @@ def add_feed(request):
     return redirect("index")
 
 @csrf_exempt
-def save_link(request):
+async def save_link(request):
     if request.method == "POST":
         data = json.loads(request.body)
         url = data.get("url")
         print(url)
-        parsed_link = parse_link(url)    
+        await sync_to_async(parse_link)(url)
 
     return redirect("index")
 

@@ -137,7 +137,7 @@ def parse_link(url):
             metadata["author"] = "NA"
 
         if metadata["date"] is None:
-            metadata["date"] = datetime.now()
+            metadata["date"] = timezone.now()
 
         t = Text(link = url, publication_date = metadata["date"], author = metadata["author"], title = metadata["title"], 
                  summary = summary, content = txt, source = metadata["sitename"])
