@@ -8,7 +8,7 @@
     <a href="{% url 'index' %}">To read</a>
     <a href="{% url 'archive' %}">Archive</a>
     <a href="{% url 'highlights' %}">Highlights</a>
-    <a href="{% url 'feeds' %}">Feeds</a>
+    <a href="{% url 'feeds' %}" class="active">Feeds</a>
     <a href="{% url 'stats' %}">Stats</a>
     <a href="{% url 'trash' %}">Trash</a>
 
@@ -28,32 +28,33 @@
 <form id="add-feed" method="post" class="add-feed-form">
     {% csrf_token %}
     <div>
-        <label for="feed-name">Name</label><br>
+        <label for="feed-name">Name</label>
         <input id="feed-name" name="name" type="text" required maxlength="200">
     </div>
     <div>
-        <label for="feed-url">URL</label><br>
+        <label for="feed-url">URL</label>
         <input id="feed-url" name="url" type="url" required maxlength="200">
     </div>
-    <div style="margin-top: 15px;">
+    <div>
         <button type="submit" class="button">Add Feed</button>
     </div>
 </form>
 
 {% if feeds %}
-    <a href="/read/update_feeds/">Update all feeds</a>
+    <div style="margin-bottom: 1rem;">
+        <a href="/read/update_feeds/" class="button">Update all feeds</a>
+    </div>
     <table>
     {% for feed in feeds %}
         <tr>
-            <td>{{feed.name}}</td>
-            <!--<td>{{feed.url}}</td>-->
-            <td>{{feed.last_updated}}</td>
-            <td><a href="/read/update_feed/{{feed.id}}">Update</a></td>
+            <td>{{ feed.name }}</td>
+            <td>{{ feed.last_updated }}</td>
+            <td><a href="/read/update_feed/{{ feed.id }}">Update</a></td>
             <td>
                 {% if feed.should_update %}
-                    <a href="/read/change_feed_updates/{{feed.id}}">Disable updates</a>
+                    <a href="/read/change_feed_updates/{{ feed.id }}">Disable updates</a>
                 {% else %}
-                    <a href="/read/change_feed_updates/{{feed.id}}">Enable updates</a>
+                    <a href="/read/change_feed_updates/{{ feed.id }}">Enable updates</a>
                 {% endif %}
             </td>
         </tr>

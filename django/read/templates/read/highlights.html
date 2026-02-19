@@ -7,7 +7,8 @@
     <h3>Menu</h3>
     <a href="{% url 'index' %}">To read</a>
     <a href="{% url 'archive' %}">Archive</a>
-    <a href="{% url 'highlights' %}">Highlights</a>
+    <a href="{% url 'highlights' %}" class="active">Highlights</a>
+    <a href="{% url 'feeds' %}">Feeds</a>
     <a href="{% url 'stats' %}">Stats</a>
     <a href="{% url 'trash' %}">Trash</a>
 
@@ -26,11 +27,11 @@
 {% if highlights %}
     <div class="article">
     {% for h in highlights %}
-        <div>
-        <blockquote>{{ h.content }}
-            (<a href={{h.text.link}}>{{h.text.title}}</a> | {{h.created_at}})
+        <blockquote>
+            {{ h.content }}
+            <br>
+            <small><a href="{{ h.text.link }}">{{ h.text.title }}</a> &middot; {{ h.created_at }}</small>
         </blockquote>
-        </div>
     {% endfor %}
     </div>
 {% else %}

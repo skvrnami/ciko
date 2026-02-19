@@ -7,7 +7,7 @@
 <body>
 <div class="sidebar">
     <h3>Menu</h3>
-    <a href="{% url 'index' %}">To read</a>
+    <a href="{% url 'index' %}" class="active">To read</a>
     <a href="{% url 'archive' %}">Archive</a>
     <a href="{% url 'highlights' %}">Highlights</a>
     <a href="{% url 'feeds' %}">Feeds</a>
@@ -28,9 +28,9 @@
 
     <div class="add-link-section">
         <h3>Add New Link</h3>
-        <form id="add-link-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
-        <input type="url" id="url-input" placeholder="Enter URL to save..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" value="{{ url }}" required>
-        <button type="submit" style="padding: 8px 16px; background-color: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer;">Add Link</button>
+        <form id="add-link-form" class="add-link-form">
+            <input type="url" id="url-input" placeholder="Enter URL to save..." value="{{ url }}" required>
+            <button type="submit">Add Link</button>
         </form>
     </div>
 
@@ -40,7 +40,7 @@
             All Sources
         </a>
         {% for source in source_counts %}
-        <a href="{% url 'index' %}?source={{ source.source|urlencode }}" 
+        <a href="{% url 'index' %}?source={{ source.source|urlencode }}"
         class="{% if selected_source == source.source %}active{% endif %}">
             {{ source.source }} ({{ source.count }})
         </a>
@@ -48,13 +48,13 @@
     </div>
 
     {% with curr_order=request.GET.order %}
-    <div class="ordering" style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-        <span style="font-weight:600;">Order:</span>
+    <div class="ordering">
+        <span>Order:</span>
 
         {% if curr_order == '' %}
-            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}order=asc">Order ▲</a>
+            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}order=asc">Order &#9650;</a>
         {% elif curr_order == 'asc' %}
-            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}order=desc">Order ▼</a>
+            <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}order=desc">Order &#9660;</a>
         {% else %}
             <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}">Cancel ordering</a>
         {% endif %}
@@ -68,17 +68,19 @@
                 <div>
                     <a href="/read/article/{{ text.id }}/">{{ text.title }}</a>
                 </div>
-                <div>
-                    {{text.publication_date}} | {{ text.source }} | {{text.reading_time}} min | 
-                    <a href="{% url 'deleted' text.id %}">Delete</a> / 
+                <div class="article-meta">
+                    {{ text.publication_date }}
+                    <span class="sep">&middot;</span>
+                    {{ text.source }}
+                    <span class="sep">&middot;</span>
+                    {{ text.reading_time }} min
+                    <span class="sep">&middot;</span>
+                    <a href="{% url 'deleted' text.id %}">Delete</a>
+                    <span class="sep">&middot;</span>
                     <a href="{% url 'read' text.id %}">Mark as read</a>
                 </div>
-                <div class="row">
-                    <div class="perex">{{text.summary | safe}}</div>
-                </div>
-            <br/>
+                <div class="perex">{{ text.summary | safe }}</div>
             </li>
-            <br/>
         {% endfor %}
         </ul>
     {% else %}
@@ -86,12 +88,10 @@
     {% endif %}
 
     <div class="pagination">
-        <!-- Previous Page -->
         {% if latest_texts.has_previous %}
             <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}page={{ latest_texts.previous_page_number }}">Previous</a>
         {% endif %}
 
-        <!-- Page Numbers -->
         {% for num in latest_texts.paginator.page_range %}
             {% if latest_texts.number == num %}
                 <strong>{{ num }}</strong>
@@ -100,7 +100,6 @@
             {% endif %}
         {% endfor %}
 
-        <!-- Next Page -->
         {% if latest_texts.has_next %}
             <a href="?{% if selected_source %}source={{ selected_source|urlencode }}&{% endif %}page={{ latest_texts.next_page_number }}">Next</a>
         {% endif %}
@@ -113,7 +112,7 @@
         e.preventDefault();
         const urlInput = document.getElementById('url-input');
         const url = urlInput.value.trim();
-        
+
         if (url) {
 
             fetch("/read/save_link/", {
@@ -126,7 +125,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'error') {
-                    displayMessage(data.message.content, true); 
+                    displayMessage(data.message.content, true);
                 } else {
                     displayMessage(data.message.content, false);
                     urlInput.value = '';

@@ -2,27 +2,28 @@
 
 <link rel="stylesheet" href="{% static 'read/style.css' %}">
 <script src="{% static 'read/dark.js' %}" defer></script>
+
     <div class="sidebar">
         <a href="{% url 'index' %}">Back home</a>
-        <br/>
+
         {% if not text.read %}
         <a href="{% url 'read' text.id %}">
             <button>Mark as read</button>
-        </a>    
+        </a>
         {% else %}
         <a href="{% url 'read' text.id %}">
             <button>Mark as unread</button>
-        </a>    
+        </a>
         {% endif %}
 
         {% if not text.deleted %}
-        <span><a href="{% url 'deleted' text.id %}"><button>Move to trash</button></a></span>
+        <a href="{% url 'deleted' text.id %}"><button>Move to trash</button></a>
         {% else %}
-        <span><a href="{% url 'deleted' text.id %}"><button>Remove from trash</button></a></span>
+        <a href="{% url 'deleted' text.id %}"><button>Remove from trash</button></a>
         {% endif %}
 
         <a><button id="save-highlight-btn" type="button" class="highlight-button">Save Highlight</button></a>
-        
+
         <div class="dark-mode-toggle">
             <label class="theme-switch">
                 <input type="checkbox" id="dark-mode-toggle">
@@ -39,8 +40,11 @@
 
         <h1>{{ text.title }}</h1>
 
-        {{ text.author }}
-        <a href={{text.link}}>{{text.link}}</a>
+        <div class="article-meta" style="margin-bottom: 1.5rem;">
+            {{ text.author }}
+            <span class="sep">&middot;</span>
+            <a href="{{ text.link }}">{{ text.link }}</a>
+        </div>
 
         <div class="article">
         {{ text.content | safe}}
@@ -51,18 +55,17 @@
 
 <script>
 document.addEventListener('mouseup', function() {
-    event.preventDefault();  
-    selectedText = window.getSelection().toString();  // Get the selected text
+    event.preventDefault();
+    selectedText = window.getSelection().toString();
     console.log(selectedText)
 });
 
 document.getElementById('save-highlight-btn').addEventListener('click', function(event) {
-    event.preventDefault();  // Prevent the default action (e.g., form submission)
-    
-    if (selectedText.length > 0) {  // Only proceed if some text is selected
-        var textId = '{{ text.id }}';  // Get the current article ID
+    event.preventDefault();
+
+    if (selectedText.length > 0) {
+        var textId = '{{ text.id }}';
         console.log(JSON.stringify({ 'content': selectedText }));
-        // Send the selected text to the Django view via AJAX
         fetch("{% url 'add_highlight' text.id %}", {
             method: 'POST',
             headers: {
@@ -73,7 +76,7 @@ document.getElementById('save-highlight-btn').addEventListener('click', function
         .then(response => response.json())
         .then(data => {
             if (data.status === 'error') {
-                displayMessage(data.message.content, true); 
+                displayMessage(data.message.content, true);
             } else {
                 displayMessage(data.message.content, false);
             }
@@ -85,25 +88,21 @@ document.getElementById('save-highlight-btn').addEventListener('click', function
 
 function displayMessage(message, isError) {
     const notificationArea = document.getElementById('notification-area');
-    
-    // Set styles dynamically based on success or error
+
     if (isError) {
-        notificationArea.style.backgroundColor = '#f8d7da'; // Error background
-        notificationArea.style.color = '#721c24'; // Error text color
-        notificationArea.style.borderColor = '#f5c6cb'; // Error border
+        notificationArea.style.backgroundColor = '#f8d7da';
+        notificationArea.style.color = '#721c24';
+        notificationArea.style.borderColor = '#f5c6cb';
         notificationArea.textContent = "error!";
     } else {
-        notificationArea.style.backgroundColor = '#d4edda'; // Success background
-        notificationArea.style.color = '#155724'; // Success text color
-        notificationArea.style.borderColor = '#c3e6cb'; // Success border
+        notificationArea.style.backgroundColor = '#d4edda';
+        notificationArea.style.color = '#155724';
+        notificationArea.style.borderColor = '#c3e6cb';
         notificationArea.textContent = "highlight saved!";
     }
 
-    // Set the message and make the notification visible
-    
     notificationArea.style.display = 'block';
 
-    // Automatically hide after 5 seconds
     setTimeout(() => {
         notificationArea.style.display = 'none';
     }, 5000);
